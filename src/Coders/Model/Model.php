@@ -734,14 +734,17 @@ class Model
     {
         $this->relationNameStrategy = $relationNameStrategy;
     }
-
     /**
-     * @param string $table
+     * @param string|array $table
      */
     public function removeTablePrefix($table)
     {
-        if (($this->shouldRemoveTablePrefix()) && (substr($table, 0, strlen($this->tablePrefix)) == $this->tablePrefix)) {
-            $table = substr($table, strlen($this->tablePrefix));
+        if (($this->shouldRemoveTablePrefix())) {
+            foreach ((array) $this->tablePrefix as $prefix) {
+                if (substr($table, 0, strlen($prefix)) == $prefix) {
+                    return substr($table, strlen($prefix));
+                }
+            }
         }
 
         return $table;
